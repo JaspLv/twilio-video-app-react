@@ -9,42 +9,38 @@ interface AudioTrackProps {
 
 export default function AudioTrack({ track }: AudioTrackProps) {
   const { activeSinkId } = useAppState();
-  const audioEl = useRef<HTMLAudioElement>();
-  const audioCtx = useRef<AudioContext>();
-  const remoteAudio = useRef<RemoteAudio>();
+  const audioEl = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    audioEl.current = track.attach();
-    audioEl.current.setAttribute('data-cy-audio-track-name', track.name);
-    audioEl.current.muted = true;
+    const el = track.attach() as HTMLAudioElement;
+    audioEl.current = el;
+    el.setAttribute('data-cy-audio-track-name', track.name);
+    el.muted = true;
+    document.body.appendChild(el);
 
-    document.body.appendChild(audioEl.current);
-
-    audioCtx.current = new AudioContext();
-
+    const audioCtx = new AudioContext();
     const mediaStream = new MediaStream([track.mediaStreamTrack]);
+    const remoteAudio = new RemoteAudio(audioCtx, { mediaStream });
 
-    remoteAudio.current = new RemoteAudio(audioCtx.current, { mediaStream });
-    remoteAudio.current.connect(audioCtx.current.destination);
+    remoteAudio.connect(audioCtx.destination);
 
     return () => {
-      remoteAudio.current?.destroy();
-      remoteAudio.current = undefined;
-      audioCtx.current?.close();
-      audioCtx.current = undefined;
+      remoteAudio.destroy();
+      audioCtx.close();
 
-      track.detach().forEach(el => {
-        el.remove();
-
-        // This addresses a Chrome issue where the number of WebMediaPlayers is limited.
-        // See: https://github.com/twilio/twilio-video.js/issues/1528
-        el.srcObject = null;
+      track.detach().forEach(element => {
+        element.srcObject = null;
+        element.remove();
       });
+
+      audioEl.current = null;
     };
   }, [track]);
 
   useEffect(() => {
-    audioEl.current?.setSinkId?.(activeSinkId);
+    if (audioEl.current?.setSinkId && activeSinkId) {
+      audioEl.current.setSinkId(activeSinkId).catch(() => {});
+    }
   }, [activeSinkId]);
 
   return null;
