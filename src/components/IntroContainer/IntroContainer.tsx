@@ -108,7 +108,7 @@ const IntroContainer = (props: IntroContainerProps) => {
             <div className={classes.logoContainer}>
               <VideoLogo />
               <Typography variant="h6" className={classes.title}>
-                MOOZ Test, revision 1
+                MOOZ Test, revision 3
               </Typography>
             </div>
           </div>
