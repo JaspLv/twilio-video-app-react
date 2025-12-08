@@ -33,5 +33,7 @@ test-reports
 junit.xml
 serviceAccountKey.json
 
+cordova
+
 public/noisecancellation/
 public/virtualbackground/

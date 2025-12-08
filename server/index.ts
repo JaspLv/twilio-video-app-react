@@ -2,12 +2,14 @@ import './bootstrap-globals';
 import { createExpressHandler } from './createExpressHandler';
 import express, { RequestHandler } from 'express';
 import path from 'path';
+import cors from 'cors';
 import { ServerlessFunction } from './types';
 
-const PORT = process.env.PORT ?? 8081;
+const PORT = process.env.BACK_PORT ?? 8081;
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 // This server reuses the serverless endpoints from the "plugin-rtc" Twilio CLI Plugin, which is used when the "npm run deploy:twilio-cli" command is run.
 // The documentation for this endpoint can be found in the README file here: https://github.com/twilio-labs/plugin-rtc
@@ -45,4 +47,5 @@ app.get('*', (_, res) => {
   res.sendFile(path.join(__dirname, '../build/index.html'), { etag: false, lastModified: false });
 });
 
-app.listen(PORT, () => console.log(`twilio-video-app-react server running on ${PORT}`));
+//@ts-ignore
+app.listen(PORT, '0.0.0.0');
