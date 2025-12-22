@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.daniil.app" version="1.0.0" xmlns="http://www.w3.org/ns/widgets"
+    xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>App</name>
+    <description>Sample Apache Cordova App</description>
+    <author email="dev@cordova.apache.org" href="https://cordova.apache.org">
+        Apache Cordova Team
+    </author>
+    <content src="index.html" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+
+    <!-- <config-file parent="UIBackgroundModes" target="*-Info.plist">
+        <array>
+            <string>audio</string>
+            <string>voip</string>
+            <string>fetch</string>
+        </array>
+    </config-file> -->
+
+    <config-file platform="ios" target="*-Info.plist" parent="UIBackgroundModes">
+        <array>
+            <string>audio</string>
+        </array>
+    </config-file>
+
+    <preference name="KeepAVAudioSessionAlwaysActive" value="YES" />
+    <preference name="SplashScreen" value="screen" />
+    <preference name="FadeSplashScreenDuration" value="300" />
+    <preference name="SplashScreenDelay" value="0" />
+
+    <preference name="AllowInlineMediaPlayback" value="true" />
+    <preference name="MediaPlaybackRequiresUserAction" value="false" />
+
+    <access origin="*" />
+    <allow-navigation href="*" />
+</widget>
